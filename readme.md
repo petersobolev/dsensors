@@ -4,7 +4,7 @@ DSensors monitoring/smarthome simple solution<br/>
 by Peter Sobolev (frog)<br/>
 frog@enlight.ru<br/>
 
-![ScreenShot](/ss_dsensors.png | width=800)
+![ScreenShot](/ss_dsensors.png)
 
 <p>client/ - web app. Dashboard (reactjs+apollo client).  server/. <br/>
          dev: http://localhost:5173/ prod: https://localhost/
