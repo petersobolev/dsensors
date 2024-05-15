@@ -1,0 +1,21 @@
+{
+    "apps": [
+        {
+            name: "dsensors_server",
+            cwd: "./server",
+            script: "./server/src/dsensors.js",
+	    watch: ['server'],
+            ignore_watch: ['node_modules', 'client'],
+            watch_delay: 1000
+        },
+        {
+
+            name: "dsensors_client_dev",
+            cwd: "./client",
+   	    script : "npm",
+            args: "run dev",
+	    interpreter: process.platform === 'win32' && 'C:\\Windows\\System32\\cmd.exe',
+	    watch: true
+        }
+    ]
+}

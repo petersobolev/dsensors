@@ -1,0 +1,228 @@
+
+
+mutation updateCustomSrcMutation ($src: Int, $loc: Int, $relay1: Int, $relay2 : Int, $period: Int, $reset: Int, $sleep: Int)  {
+  updateCustomSrc(input: {_loc: $loc, _src: $src, _relay1: $relay1, _relay2: $relay2, _period: $period, _reset: $reset, _sleep: $sleep}) {
+    stSrcs{
+      loc
+      src
+      name
+      relay1
+      relay2
+      period
+      reset
+      sleep
+    }
+  }
+}
+
+
+
+
+
+query getLastQuery($src: Int, $loc: Int) {
+  
+
+  allStMains(orderBy: ID_DESC, first: 1, condition: {src: $src, loc: $loc}) {
+    nodes {
+      id
+      btFound
+      count
+      dtCrt
+      fl
+      heap
+      loc
+      nodeId
+      src
+      upsC
+      upsP
+      upsSv
+      upsV
+      uptime
+      wRssi
+      wTime
+      wTimeUt
+      stBtsByMainId {
+        nodes {
+          t
+          name
+          bl
+          bv
+          addr
+          id
+          h
+          valid
+        }
+      }
+      stOtsByMainId {
+        nodes {
+          t
+          i
+        }
+      }
+      stMotionsByMainId {
+        nodes {
+          m
+          i
+        }
+      }
+      stRswitchesByMainId {
+        nodes {
+          i
+          s
+        }
+      }
+      stVsByMainId {
+        nodes {
+          i
+          v
+        }
+      }
+    }
+
+
+
+
+
+
+  }
+
+
+
+  allStWidgets(orderBy: SORT_ASC, condition: {src: $src, loc: $loc, active: 1}) {
+    edges {
+      node {
+        id
+        i
+        name
+        widget
+        vmax
+        vmin
+      }
+    }
+  }
+
+
+  allStMotions(orderBy: ID_DESC, first:2, condition: {src: $src, loc: $loc}) {
+    nodes {
+      m
+      dtCrt
+      id
+      i
+      loc
+      src
+      mainId
+    }
+  }
+
+
+  allStRswitches(orderBy: ID_DESC, first:1, condition: {src: $src, loc: $loc}) {
+    nodes {
+      s
+      dtCrt
+      id
+      i
+      loc
+      src
+      mainId
+    }
+  }
+
+
+
+}
+
+
+
+query getAllQuery($last: Int, $src: Int, $loc: Int)  {
+  allStMains(orderBy: ID_ASC, last: $last, condition: {src: $src, loc: $loc}) {
+    nodes {
+      id
+      btFound
+      count
+      dtCrt
+      fl
+      heap
+      loc
+      nodeId
+      src
+      upsC
+      upsP
+      upsSv
+      upsV
+      uptime
+      wRssi
+      wTime
+      wTimeUt
+      stOtsByMainId {
+        nodes {
+          i
+          t
+        }
+      }
+      stBtsByMainId(condition: {valid: 1}) {
+        nodes {
+          addr
+          bl
+          bv
+          h
+          name
+          rssi
+          t
+        }
+      }
+      stMotionsByMainId {
+        nodes {
+          i
+          m
+        }
+      }
+      stRswitchesByMainId {
+        nodes {
+          i
+          s
+        }
+      }
+      stVsByMainId {
+        nodes {
+          i
+          v
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+query getAllSrcs($loc: Int)  {
+  allStSrcs(orderBy: ID_ASC, condition: {loc: $loc}) {
+    nodes {
+      id
+      loc
+      src
+      name
+      relay1
+      relay2
+      period
+      reset
+      sleep
+    }
+  }
+}
+
+
+
+
+query getAllLocs  {
+  allStLocs(orderBy: ID_ASC) {
+    nodes {
+      id
+      loc
+      name
+    }
+  }
+}
+
+
