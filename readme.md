@@ -5,9 +5,7 @@ DSensors monitoring/smarthome simple solution<br/>
 
 ![ScreenShot](/ss_dsensors.png)
 
-<p>client/ - web app. Dashboard (reactjs+apollo client).  server/. <br/>
-         dev: http://localhost:5173/ prod: https://localhost/
-
+<p>client/ - web app. Dashboard (reactjs + apollo client).  
 
 <p>server/ - server (nodejs + express + postgraphile). postgres db (schema .dsensors).
 
@@ -18,8 +16,6 @@ DSensors monitoring/smarthome simple solution<br/>
 4) static html/css (for prod client): https://localhost/
 
 <p>esp32/ - esp32 .c code (sends requests to #3)<br/>
-misc/ - diagrams, etc<br/>
-server_php/ - initial php server (unused)
 
 
 <p>To run client/server in dev mode: rundev.cmd<br/>
