@@ -24,3 +24,4 @@ To run prod: 1) build (build.cmd) 2) run server (cd server && npm start) 3) open
 To run prod on linux use pm2 start server/src/dsensors.js
 
 
+<p>MIT license
