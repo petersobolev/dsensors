@@ -1,8 +1,7 @@
 # DSensors
 
 DSensors monitoring/smarthome simple solution<br/>
-by Peter Sobolev (frog)<br/>
-frog@enlight.ru<br/>
+<p>
 
 ![ScreenShot](/ss_dsensors.png)
 
@@ -12,8 +11,8 @@ frog@enlight.ru<br/>
 
 <p>server/ - server (nodejs + express + postgraphile). postgres db (schema .dsensors).
 
-<p>Endpoints:<br/>
-1) graphql debug UI: https://localhost:3000/graphiql<br/>
+<p>Endpoints:
+<p>1) graphql debug UI: https://localhost:3000/graphiql<br/>
 2) graphql POST requests from dashboard web app: https://localhost:3000/graphql<br/>
 3) json POST requests from devices: https://localhost/api<br/>
 4) static html/css (for prod client): https://localhost/
