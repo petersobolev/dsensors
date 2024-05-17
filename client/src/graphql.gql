@@ -102,7 +102,19 @@ query getLastQuery($src: Int, $loc: Int) {
   }
 
 
-  allStMotions(orderBy: ID_DESC, first:2, condition: {src: $src, loc: $loc}) {
+  allStMotions1:allStMotions(orderBy: ID_DESC, first:2, condition: {src: $src, loc: $loc, i:1}) {
+    nodes {
+      m
+      dtCrt
+      id
+      i
+      loc
+      src
+      mainId
+    }
+  }
+
+  allStMotions2:allStMotions(orderBy: ID_DESC, first:2, condition: {src: $src, loc: $loc, i:2}) {
     nodes {
       m
       dtCrt

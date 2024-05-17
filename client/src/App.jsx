@@ -85,7 +85,7 @@ function App() {
   const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [lastRows, setlastRows] = useState(10);
+  const [lastRows, setlastRows] = useState(60); //10
   const [loc, setLoc] = useState(1);
 
   
@@ -145,13 +145,15 @@ if (lastData.data.allStMains.nodes.length===0) {
   return false;
 }
 
+//console.log('allData.data.allStMains',allData.data.allStMains);
 
   const allDataChart = allData.data.allStMains.nodes.map(item => {
 
     return {
       id: item.id,
 //      date: item.wTimeUt,
-      date: new Date(item.dtCrt),
+//      date: new Date(item.dtCrt),
+      date: getUnixTime(new Date(item.dtCrt)),
       heap: item.heap,
       count: item.count,
       uptime: item.uptime,
@@ -163,15 +165,15 @@ if (lastData.data.allStMains.nodes.length===0) {
       ot0: item.stOtsByMainId.nodes.find(sensor=>sensor.i==0)?.t,
       ot1: item.stOtsByMainId.nodes.find(sensor=>sensor.i==1)?.t,
       ot2: item.stOtsByMainId.nodes.find(sensor=>sensor.i==2)?.t,
-      bte0t: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:8f:5e:e0")?.t,
-      bta7t: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:43:10:a7")?.t,
-      bt19t: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:be:5f:19")?.t,
-      bte0h: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:8f:5e:e0")?.h,
-      bta7h: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:43:10:a7")?.h,
-      bt19h: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:be:5f:19")?.h,
-//      bte0r: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:8f:5e:e0")?.rssi,
-//      bta7r: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:43:10:a7")?.rssi,
-//      bt19r: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="f4:c1:38:be:5f:19")?.rssi,
+      bte0t: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:8f:5e:e0")?.t,
+      bta7t: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:43:10:a7")?.t,
+      bt19t: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:be:5f:19")?.t,
+      bte0h: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:8f:5e:e0")?.h,
+      bta7h: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:43:10:a7")?.h,
+      bt19h: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:be:5f:19")?.h,
+//      bte0r: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:8f:5e:e0")?.rssi,
+//      bta7r: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:43:10:a7")?.rssi,
+//      bt19r: item.stBtsByMainId.nodes.find(sensor=>sensor.addr=="a4:c1:38:be:5f:19")?.rssi,
       v1: item.stVsByMainId.nodes.find(sensor=>sensor.i==1)?.v, 
       v2: item.stVsByMainId.nodes.find(sensor=>sensor.i==2)?.v, 
       motion1: item.stMotionsByMainId.nodes.find(sensor=>sensor.i==1)?.m, 
@@ -179,14 +181,13 @@ if (lastData.data.allStMains.nodes.length===0) {
       rswitch: item.stRswitchesByMainId.nodes.find(sensor=>sensor.i==1)?.s, 
     }
   });
-
-  
+//  console.log('allDataChart',allDataChart);
   let dataGaps = [];
   // find gaps in data (if device skipped data sending for some time)
   for (let i=0; i<allDataChart.length; i++) { 
-   
+
     if ((allDataChart[i+1]?.date - allDataChart[i]?.date)>(values.period*2)) { 
-      
+
       dataGaps.push({
 
         date: allDataChart[i]?.date, 
@@ -216,15 +217,13 @@ if (lastData.data.allStMains.nodes.length===0) {
   const outOfRange = differenceInSeconds( new Date(),new Date(lastData.data.allStMains.nodes[0].dtCrt) ) > 60*10;
 
   const CustomTooltip = ({ active, payload, label }) => {
-
+//console.log('CustomTooltip payload',payload);
     if (active && payload && payload.length) {
       return (
         <Grid sx={{backgroundColor:'#000', border: '1px solid #aaa', padding: '8px'}}>
-          <div style={{fontWeight: 'bold', marginBottom: '-6px'}}>{format(label, "MM/dd/yyyy HH:mm:ss")}</div>
-          <div style={{fontSize: '11px', marginBottom: '5px'}}>{formatDistanceStrict(label , new Date(), { includeSeconds: false, addSuffix: true })}</div>
-
-
-          
+          <div style={{fontWeight: 'bold', marginBottom: '-6px'}}>{format(fromUnixTime(label), "MM/dd/yyyy HH:mm:ss")}</div>
+          <div style={{fontSize: '11px', marginBottom: '5px'}}>{formatDistanceStrict(new Date( fromUnixTime(label)) , new Date(), { includeSeconds: false, addSuffix: true })}</div>
+{/*             <div style={{fontWeight: 'bold', }}>ut: {label}</div> */}
           {payload.map(item=>(<div key={item.dataKey} style={{color: item.stroke }}>{item.name} ({item.dataKey}) : {item.value}</div>))}
         </Grid>
       );
@@ -237,7 +236,7 @@ if (lastData.data.allStMains.nodes.length===0) {
   const handleInputChange = e => {
     //    console.log('handleInputChange e', e);
     let { name, value, checked } = e.target;
-    console.log('name, value, checked:',name, value, checked);
+//    console.log('name, value, checked:',name, value, checked);
 
     // for <Switch/>
     if (checked) value = checked;
@@ -523,7 +522,6 @@ if (lastData.data.allStMains.nodes.length===0) {
             <Grid container item justifyContent="flex-start" alignContent="flex-start"  sx={{ gap:'8px', flexGrow: 1, background: outOfRange ? 'repeating-linear-gradient(45deg, transparent, transparent 10px, #ccc 10px, #ccc 20px )' : 'none' }} 
             >
 
-
             {lastData?.data.allStWidgets.edges.map(item => (
 // for each sensor
 
@@ -540,9 +538,7 @@ if (lastData.data.allStMains.nodes.length===0) {
 
                 case 'v' :      return <WidgetV      data={lastData.data.allStMains.nodes[0].stVsByMainId.nodes.find(     item2 => item2.i==item.node.i)} meta={item.node} />
 
-//                case 'motion' : return <WidgetMOTION data={lastData.data.allStMains.nodes[0].stMotionsByMainId.nodes.find(item2 => item2.i==item.node.i)} meta={item.node} />
-
-                case 'motion' : return <WidgetMOTION data={lastData.data.allStMotions.nodes.find(item2 => item2.i==item.node.i)} meta={item.node} />
+                case 'motion' : return <WidgetMOTION data={   {...lastData.data.allStMotions1.nodes.find(item2 => item2.i==item.node.i) , ...lastData.data.allStMotions2.nodes.find(item2 => item2.i==item.node.i) }       } meta={item.node} />
 
                 case 'rswitch' : return <WidgetRSWITCH data={lastData.data.allStRswitches.nodes[0]} meta={item.node} />
 
@@ -573,6 +569,7 @@ if (lastData.data.allStMains.nodes.length===0) {
               <Grid xs={12} md={6} container item alignContent="center"><Typography sx={{fontSize: '14px'}}>Charts</Typography></Grid>
               <Grid xs={12} md={6} container item alignContent="center"  justifyContent={{xs: "flex-start", md: "flex-end"}}>
                 <NativeSelect disableUnderline={true} value={lastRows} onChange={(e)=>{ 
+                  console.log('setlastRows',Number(e.target.value));
                   setlastRows(Number(e.target.value));
                   enqueueSnackbar({
                     message: `Loading data for ${Number(e.target.value)} events`,
@@ -593,20 +590,21 @@ if (lastData.data.allStMains.nodes.length===0) {
 
 
 
-            <ResponsiveContainer width="100%" height={200}>
+              <ResponsiveContainer width="100%" height={200}>
+
               <BarChart width={500} height={20} data={allDataChart}
                   syncId="anyId"
                   margin={{ top: 5, right: 40, bottom: 5, left: -20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(date) => format(date, "HH:mm") } />
+                <XAxis dataKey="date" tickFormatter={(date) => format(fromUnixTime(date), "HH:mm") } />
                 <YAxis />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend  />
                 {dataGaps.map(item => <ReferenceLine x={item.date} label={item.gapLabel} strokeDasharray="2 5" stroke="red" strokeWidth={8} isFront key={item.date} />)}
+                
                 <Bar name="stairs f2" dataKey="motion1" fill="#8e1b93" stackId="a"/>
                 <Bar name="room f2" dataKey="motion2" fill="#4444ff" stackId="a"/>
-{/*                <Bar name="door f2" dataKey="rswitch" fill="#ff4444" stackId="a"/> */}
               </BarChart>
             </ResponsiveContainer>
 
@@ -619,7 +617,7 @@ if (lastData.data.allStMains.nodes.length===0) {
                 margin={{ top: 5, right: -20, bottom: 5, left: -20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(date) => format(date, "HH:mm") } />
+                <XAxis dataKey="date" tickFormatter={(date) => format(fromUnixTime(date), "HH:mm") } />
 
                 <YAxis yAxisId="left" domain={[0, 300]} />
                 <YAxis yAxisId="right" orientation="right" domain={[0, 100]} />
@@ -645,7 +643,7 @@ if (lastData.data.allStMains.nodes.length===0) {
                 syncId="anyId"
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(date) => format(date, "HH:mm") } />
+                <XAxis dataKey="date" tickFormatter={(date) => format(fromUnixTime(date), "HH:mm") } />
                 <YAxis domain={[-30, 30]} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend  />
@@ -666,7 +664,7 @@ if (lastData.data.allStMains.nodes.length===0) {
                 margin={{ top: 5, right: 40, bottom: 5, left: -20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(date) => format(date, "HH:mm") } />
+                <XAxis dataKey="date" tickFormatter={(date) => format(fromUnixTime(date), "HH:mm") } />
                 <YAxis domain={[-5, 30]} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend  />
@@ -686,7 +684,7 @@ if (lastData.data.allStMains.nodes.length===0) {
                 margin={{ top: 5, right: 40, bottom: 5, left: -20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(date) => format(date, "HH:mm") } />
+                <XAxis dataKey="date" tickFormatter={(date) => format(fromUnixTime(date), "HH:mm") } />
                 <YAxis domain={[20, 60]} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend  />
@@ -705,7 +703,7 @@ if (lastData.data.allStMains.nodes.length===0) {
                 margin={{ top: 5, right: -22, bottom: 5, left: -20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(date) => format(date, "HH:mm") } />
+                <XAxis dataKey="date" tickFormatter={(date) => format(fromUnixTime(date), "HH:mm") } />
                 <YAxis yAxisId="left" domain={[-212, 4]}  />
                 <YAxis yAxisId="right" orientation="right" domain={[5, 9]} />
                 <Tooltip content={<CustomTooltip />} />
@@ -725,7 +723,7 @@ if (lastData.data.allStMains.nodes.length===0) {
                 margin={{ top: 5, right: -22, bottom: 5, left: -20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(date) => format(date, "HH:mm") } />
+                <XAxis dataKey="date" tickFormatter={(date) => format(fromUnixTime(date), "HH:mm") } />
                 <YAxis yAxisId="left" domain={[-30, -10]} />
                 <YAxis yAxisId="right" orientation="right" domain={[0, 30]} />
                 <Tooltip content={<CustomTooltip />} />
@@ -744,7 +742,7 @@ if (lastData.data.allStMains.nodes.length===0) {
                 margin={{ top: 5, right: -22, bottom: 5, left: -20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" tickFormatter={(date) => format(date, "HH:mm") } />
+                <XAxis dataKey="date" tickFormatter={(date) => format(fromUnixTime(date), "HH:mm") } />
                 <YAxis yAxisId="left" domain={[100, 200]} />
                 <YAxis yAxisId="right" orientation="right" domain={[0, 2000]} />
                 <Tooltip content={<CustomTooltip />} />

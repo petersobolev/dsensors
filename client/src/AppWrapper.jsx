@@ -13,7 +13,7 @@ import { useSnackbar } from 'notistack';
 
 
 const client = new ApolloClient({
-  uri: import.meta.env.VITE_APP_GRAPHQL_API, 
+  uri: import.meta.env.VITE_APP_GRAPHQL_API, //"http://localhost:3000/graphql",
   cache: new InMemoryCache(),
 });
 
