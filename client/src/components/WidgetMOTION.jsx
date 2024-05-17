@@ -1,6 +1,6 @@
 import React from "react";
 
-import { format, parseISO, formatISO, formatDistance, differenceInHours } from 'date-fns'
+import { formatDistance, differenceInHours } from 'date-fns'
 
 
 import Grid from '@mui/material/Grid';
@@ -29,7 +29,7 @@ const WidgetMOTION = props => {
     return  <SensorCard backgroundColor={backgroundColor} width={width} ></SensorCard>;
   
 
-//  console.log('WidgetMOTION visData',data)
+  //console.log('WidgetMOTION visData',data)
 
   const timePassed = formatDistance(new Date(data.dtCrt), new Date(), {
     includeSeconds: false,

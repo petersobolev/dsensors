@@ -25,17 +25,18 @@ const WidgetBATTERY = props => {
 
   const theme = useTheme();
   
-//  console.log('WidgetBATTERY',props)
+// console.log('WidgetBATTERY',props)
 
   if (!data)
     return  <SensorCard backgroundColor={backgroundColor} width={width} ></SensorCard>;
-  
+
   // darken card if more than 1h passed since wifi event received
-  if (differenceInHours( new Date(),data.dtCrt ) > 1 ) {
+  if (differenceInHours( new Date(),new Date(data.dtCrt) ) > 1 ) {
     backgroundColor = theme.palette.grey[800];
   } else  {
     backgroundColor = theme.palette.grey[700];
   }
+
 
 //  console.log('WidgetBATTERY data',data)
 

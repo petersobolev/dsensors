@@ -17,12 +17,10 @@ import BatteryCharging80Icon from '@mui/icons-material/BatteryCharging80';
 import BatteryCharging90Icon from '@mui/icons-material/BatteryCharging90';
 import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
 
-import BatteryAlertIcon from '@mui/icons-material/BatteryAlert';
-
 const BatteryIcon = props => {
 
   const { percent, charging } = props;
-  //const percent = 100;
+
 
   if (charging) {
 
@@ -65,5 +63,5 @@ const BatteryIcon = props => {
     
 };
 
-//<Tooltip title={JSON.stringify(data) + JSON.stringify(meta)}></Tooltip>
+
 export default BatteryIcon;
