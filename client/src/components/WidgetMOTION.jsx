@@ -24,8 +24,7 @@ const WidgetMOTION = props => {
   
 //  console.log('WidgetMOTION',props)
 
-
-  if (!data)
+  if (Object.keys(data).length === 0) 
     return  <SensorCard backgroundColor={backgroundColor} width={width} ></SensorCard>;
   
 
