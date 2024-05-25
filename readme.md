@@ -23,6 +23,6 @@ frog@enlight.ru
 To run prod: 1) build (build.cmd) 2) run server (cd server && npm start) 3) open prod on localhost<br/>
 To run prod on linux use pm2 start server/src/dsensors.js
 
-<p>Article: [https://habr.com/ru/articles/817001/](https://habr.com/ru/articles/817001/)
+<p>Article: https://habr.com/ru/articles/817001/
 
 <p>MIT license
